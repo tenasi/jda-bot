@@ -15,7 +15,9 @@
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
         "vscjava.vscode-java-pack",
-		"vscjava.vscode-gradle"
+		"vscjava.vscode-gradle",
+		"vizzuhq.code-viz-stat",
+		"mathiasfrohlich.Kotlin"
 	]
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
