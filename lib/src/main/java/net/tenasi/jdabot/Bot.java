@@ -3,6 +3,7 @@
  */
 package net.tenasi.jdabot;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -23,10 +24,68 @@ public class Bot {
 
     private final Map<Class<? extends AbstractController>, AbstractController> controllers;
 
-    public Bot(JDA jda) {
+    /**
+     * Creates a new bot instance based on a given {@link net.dv8tion.jda.api.JDA} object.
+     * @param jda Instance of {@link net.dv8tion.jda.api.JDA} this bot is using.
+     */
+    Bot(JDA jda) {
         this.jda = jda;
         this.handlers = new HashSet<>();
         this.controllers = new HashMap<>();
+    }
+
+    /**
+     * Add a new {@link net.tenasi.jdabot.AbstractController} to the instance of this bot.
+     * Each {@link net.tenasi.jdabot.AbstractController} implementation is unique and can only be added once to the bot.
+     * If an implementation of the same class already exists it will be replaced by the given instance.
+     * @param <T> Implementing class of {@link net.tenasi.jdabot.AbstractController}
+     * @param controller Instance of implementing class of {@link net.tenasi.jdabot.AbstractController}
+     */
+    <T extends AbstractController> void addController(T controller) {
+        this.controllers.put(controller.getClass(), controller);
+    }
+
+    /**
+     * Get the controller instance for a specified class.
+     * @param <T> Class of the controller instance.
+     * @param controllerClass Class object of the controller instance.
+     * @return Controller instance matching the specified class.
+     */
+    @SuppressWarnings("unchecked") // Safe to assume, since the key specified the object class.
+    public <T extends AbstractController> T getController(Class<T> controllerClass) {
+        return (T)this.controllers.get(controllerClass);
+    }
+
+    /**
+     * Register a new handler from this bot instance.
+     * @param handler New handler that will be registered.
+     */
+    public void registerHandler(AbstractHandler handler) {
+        handlers.add(handler);
+    }
+
+    /**
+     * Remove an existing handler from this bot instance.
+     * @param handler Existing handler that will be removed.
+     */
+    public void unregisterHandler(AbstractHandler handler) {
+        handlers.remove(handler);
+    }
+
+    /**
+     * Get all registered handlers from this bot instance.
+     * @return An unmodifiable set of all registered handlers.
+     */
+    public Set<AbstractHandler> getHandlers() {
+        return Collections.unmodifiableSet(handlers);
+    }
+
+    /**
+     * Get the {@link net.dv8tion.jda.api.JDA} object used by this bot.
+     * @return {@link net.dv8tion.jda.api.JDA} object used by this bot.
+     */
+    public JDA getJDA() {
+        return jda;
     }
 
 }
